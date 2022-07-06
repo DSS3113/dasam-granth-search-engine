@@ -1,0 +1,41 @@
+<html>
+    <body>
+        <a href="/">Return Home</a><p>
+        {% if page_no|int != 1 %}
+        <form action="{{ url_for('read_page_by_page') }}" method="GET">
+            <input value="{{ page_no|int-1 }}" type="hidden" name="page_no" />
+            <button type="submit">Previous page</button>
+        </form><p>
+        {% endif %}
+        <form action="{{ url_for('read_page_by_page') }}" method="GET">
+            <input value="{{ page_no|int+1 }}" type="hidden" name="page_no" />
+            <button type="submit">Next page</button>
+        </form>
+        <form action="{{ url_for('read_page_by_page', page_no=1) }}" method="GET">
+            Sri Dasam Granth Page #: <input type="number" placeholder="Go to page" value="{{ page_no }}" name="page_no" /> of 1428
+        </form>
+
+        {% for line_gurmukhi, line_transliteration_devanagiri, line_transliteration_latin, line_translation in lines_data %}
+            {% if highlight == line_gurmukhi %}
+                <a id="{{ line_gurmukhi }}"></a>
+                <div style="background-color: yellow;">
+                    <p>
+                        {{ to_unicode(line_gurmukhi) }}<br />
+                        {{ line_transliteration_devanagiri }} <br />
+                        {{ line_transliteration_latin }}<br />
+                        {{ line_translation }}
+                    </p>
+                </div>
+            {% else %}
+                <div>
+                    <p>
+                        {{ to_unicode(line_gurmukhi) }}<br />
+                        {{ line_transliteration_devanagiri }} <br />
+                        {{ line_transliteration_latin }}<br />
+                        {{ line_translation }}
+                    </p>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </body>
+</html>

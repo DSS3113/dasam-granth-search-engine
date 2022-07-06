@@ -1,0 +1,22 @@
+<html>
+    <body>
+        <a href="/">Return Home</a>
+        <form action="{{ url_for('search_results', page_no=1) }}" method="GET">
+            Find results that
+            that <b>begin with</b> <input name="begin_with" /><p>
+            with <b>all</b> of the words <input name="all" /><p>	
+            with <b>first letters</b> of the words (anywhere) <input name="first_letters" /><p>
+            with <b>any</b> of the words (partial or whole)	<input name="any" /><p>
+            with the <b>exact phrase</b> <input name="exact_phrase" /><p>
+            <label for="lang_script">Choose language/script:</label>
+            <select name="lang_script">
+                <option value="english" selected>English</option>
+                <option value="gurmukhi">Gurmukhi</option>
+                <option value="devanagiri">Devanagiri</option>
+                <option value="transliteration">Transliteration</option>
+            </select><p>
+            Specify number of results per page <input value=500 name="results_per_page" /><p>
+            <button type="submit">Search</button>
+        </form>
+    </body>
+</html>

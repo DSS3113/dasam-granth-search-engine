@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block body %}
+    {{ super() }}
+    {% for line_source_page, line_gurmukhi, line_transliteration_devanagiri, line_transliteration_latin, line_translation in lines_data.items %}
+        <div>
+            <p>
+                <form action="{{ url_for('read_page_by_page')+'#'+line_gurmukhi }}" method="GET">
+                    <input value="{{ line_source_page }}" type="hidden" name="page_no" />
+                    <input value="{{ line_gurmukhi }}" type="hidden" name="highlight" />
+                    <button style="background: none; border: none; padding: 0; color: #069; text-decoration: underline; cursor: pointer;" type="submit">
+                        Page {{ line_source_page }}
+                    </button><p>
+                    {{ to_unicode(line_gurmukhi) }}<br />
+                    {{ line_transliteration_devanagiri }} <br />
+                    {{ line_transliteration_latin }}<br />
+                    {{ line_translation }}
+                </form>
+            </p>
+        </div>
+    {% endfor %}
+    {% if lines_data.has_prev %}
+    <form action="{{ url_for('search_results', page_no=lines_data.prev_num, **request.args) }}" method="POST">
+        <button type="submit">Previous page</button>
+    </form><p>
+    {% endif %}
+    {%- for page_no in lines_data.iter_pages(left_edge=2, left_current=2, right_current=5, right_edge=2) %}
+        {% if page_no %}
+            {% if page_no != lines_data.page %}
+                <a href="{{ url_for('search_results', page_no=page_no, **request.args) }}">{{ page_no }}</a>
+            {% else %}
+                <strong>{{ page_no }}</strong>
+            {% endif %}
+        {% else %}
+            <span class="ellipsis">…</span>
+        {% endif %}
+    {%- endfor %}
+    <p>
+    {% if lines_data.has_next %}
+    <form action="{{ url_for('search_results', page_no=lines_data.next_num, **request.args) }}" method="POST">
+        <button type="submit">Next page</button>
+    </form><p>
+    {% endif %}
+    {% if lines_data.total == 0  %}
+        No results found.
+    {% else %}
+        Results {{ (lines_data.page-1)*lines_data.per_page+1 }} - {{ lines_data.page*lines_data.per_page if lines_data.items|length >= lines_data.per_page else lines_data.total }} of {{ lines_data.total }}
+    {% endif %}
+{% endblock %}
